@@ -1,0 +1,110 @@
+---
+title: "iNext+bird"
+output:
+  html_document: default
+  pdf_document: default
+---
+Biologia Quantitativa 2020/2
+Nicole Araújo - 170112110
+Paola Freitas - 170122492
+
+O que é o iNEXT?
+
+“iNEXT” significa INterpolação/EXTrapolação
+É um pacote que foca em três medidas de números Hill
+(medidas de diversidade de espécies), de ordem q:
+
+1- riqueza de espécies (q=0),  
+2- diversidade de Shannon (q=1)
+3-diversidade Simpson (q=2).
+
+Basicamente o que ele faz é prover funções simples que plotam
+as curvas de rarefação e extrapolação das amostras.
+
+Para cada medida de diversidade o iNEXT usa a amostra observada de 
+abundância ou dados de ocorrência (amostra de referência) para computar
+estimativas de diversidade e intervalos de confiança de 95% para dois
+tipos de rarefação e extrapolação (R/E): sample-size-based e coverage-based.
+
+Para mais detalhes veja a explicação do pacote: ”A Quick Introduction 
+to iNEXT via Examples”
+```{r}
+vignette ("Introduction","iNEXT")
+```
+
+Instale e importe os pacotes iNEXT e ggplot2
+```{r}
+install.packages("iNEXT", repos = "http://cran.us.r-project.org")
+library(iNEXT)
+library(ggplot2)
+```
+
+Vamos testar os comandos com o pacote bird
+Esse pacote é um dataframe com 41 espécies em dois locais de amostragem: norte e sul
+```{r}
+data("bird")
+summary(bird) #ou
+bird #ou
+str(bird) 
+```
+O str é uma alternativa ao summary (significa str-ucture); 
+te dá informações sobre o objeto que está sendo analisado.
+
+
+iNEXT é a função principal do pacote, responsável por fazer a interpolação
+e extrapolação dos números de Hill
+```{r}
+speciesrichness <-iNEXT(bird, q=0, datatype="abundance") 
+shannon <-iNEXT(bird, q=1, datatype="abundance") 
+simpson <-iNEXT(bird, q=2, datatype="abundance") 
+```
+O primeiro argumento dessa função é uma matriz, um data frame ou uma lista (neste caso um dataframe)
+O segundo argumento especifíca a ordem do Hill number
+Os tipos de dados no argumento de datatype podem ser: “abundance”, “incidence_raw” or “incidence_freq”.
+
+
+Para o cálculo de assíntotas estimadas:
+```{r}
+ChaoRichness (bird, datatype = "abundance", conf = 0.95) #q=0
+ChaoShannon (bird, datatype = "abundance", conf = 0.95) #q=1
+ChaoSimpson (bird, datatype = "abundance", conf = 0.95) #q=2
+```
+
+Aqui, estamos gerando 3 tipos de curvas em cada Chunk:
+1- sample-size-based R/E curve 
+2- Sample completeness curve
+3- Coverage-based R/E curve 
+Argumentos:
+"facet.var"pode separar os gráficos por "site" ou "order"
+O argumento grey quando verdadeiro plota gráficos em preto e branco, outros argumentos
+também podem ser usados para mudar o display: xlim(), ylim (), theme() and theme_bw()
+
+PARA Q=0, riqueza de espécies
+```{r}
+ggiNEXT(speciesrichness, type=1, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+ggiNEXT(speciesrichness, type=2, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+ggiNEXT(speciesrichness, type=3, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+```
+
+PARA Q=1, diversidade Shannon
+```{r}
+ggiNEXT(shannon, type=1, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+ggiNEXT(shannon, type=2, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+ggiNEXT(shannon, type=3, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+```
+
+PARA Q=2, diversidade Simpson
+```{r}
+ggiNEXT(simpson, type=1, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+ggiNEXT(simpson, type=2, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+ggiNEXT(simpson, type=3, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
+```
+
+Para plotar q=0,1,2 em um mesmo gráfico, dividido por locais ("site"):
+```{r}
+out <- iNEXT(bird, q=c(0, 1, 2), datatype="abundance", endpoint=500)
+ggiNEXT(out, type=1, facet.var="site")
+``` 
+
+Certo! Agora, para usar os dados das listas de Mackinnon:  importamos o csv data exportados de uma planilha (Excel) usando a função
+“read_csv” ou File-> Import Dataset
