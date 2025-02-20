@@ -20,9 +20,18 @@ dadografco500 <- iNEXT(macki_co$somaregistros, q=0, datatype = "abundance", endp
 dadografco1000 <- iNEXT(macki_co$somaregistros, q=0, datatype = "abundance", endpoint = 1000)
 ggiNEXT(dadografco500, type=1, se=TRUE, facet.var="None", color.var="Both", grey=FALSE)  
 ggiNEXT(dadografco1000, type=1, se=TRUE, facet.var="None", color.var="Both", grey=FALSE)  
-dadografco1000
+dadografco
 #
-#calcular a curva de rarefacao das areas naturais
+#calcular a curva de rarefacao da reitoria bce
+
+dadografreitoria = iNEXT(macki_reitoria$somaregistreitoria, q=0, datatype = "abundance")
+ggiNEXT(dadografreitoria, type=1, se=TRUE, facet.var="None", color.var="Both", grey=FALSE)  
+dadografreitoria500 <- iNEXT(macki_reitoria$somaregistreitoria, q=0, datatype = "abundance", endpoint = 500)
+dadografreitoria1000 <- iNEXT(macki_reitoria$somaregistreitoria, q=0, datatype = "abundance", endpoint = 1000)
+ggiNEXT(dadografreitoria500, type=1, se=TRUE, facet.var="None", color.var="Both", grey=FALSE)  
+ggiNEXT(dadografreitoria1000, type=1, se=TRUE, facet.var="None", color.var="Both", grey=FALSE)  
+dadografreitoria
+
 #
 dadografnat = iNEXT(mackinat$conta, q=0, datatype = "abundance")
 ggiNEXT(dadografnat, type=1, se=TRUE, facet.var="None", color.var="Both", grey=FALSE)  
